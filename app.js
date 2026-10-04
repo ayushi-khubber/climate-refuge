@@ -4,14 +4,12 @@ const j=async(u,o)=>{const r=await fetch(u,o);if(!r.ok)throw new Error('HTTP '+r
 const dist=(a,b,c,d)=>{const r=Math.PI/180,x=(c-a)*r,y=(d-b)*r,h=Math.sin(x/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(y/2)**2;return 12742*Math.asin(Math.sqrt(h))};
 let place=null,map,layer,hist=null,fac,facs=[];
 
-// Tabs
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#tabs button,.tab').forEach(e=>e.classList.remove('on'));
   b.classList.add('on');$('#'+b.dataset.tab).classList.add('on');
   if(b.dataset.tab==='respond'&&map)setTimeout(()=>map.invalidateSize(),50);
 });
 
-// Search
 $('#searchForm').onsubmit=async e=>{
   e.preventDefault();const q=$('#q').value.trim();if(!q)return;
   try{
@@ -34,7 +32,6 @@ function setPlace(p){
   loadWeather();loadAlerts();loadFacilities();loadHistory();
 }
 
-// Weather (Open-Meteo, no key)
 async function loadWeather(){
   $('#now').textContent='Loading…';
   try{
@@ -45,7 +42,6 @@ async function loadWeather(){
   }catch(e){$('#now').innerHTML='<span class="err">Weather unavailable ('+esc(e.message)+')</span>'}
 }
 
-// Hazards: NASA EONET + USGS, filtered to 500 km
 async function loadAlerts(){
   $('#alerts').textContent='Loading…';
   const items=[];
@@ -62,7 +58,6 @@ async function loadAlerts(){
   drawMap(near,[]);
 }
 
-// Nearest hospitals/clinics: OpenStreetMap Overpass
 async function loadFacilities(){
   $('#facilities').textContent='Loading…';facs=[];drawFac();
   const q=`[out:json][timeout:20];nwr["amenity"~"hospital|clinic"](around:15000,${place.lat},${place.lon});out center 40;`;
@@ -83,7 +78,6 @@ function drawMap(hz){
   hz.forEach(i=>L.circleMarker([i.lat,i.lon],{color:'#c8553d'}).addTo(layer).bindPopup(esc(i.t)));drawFac();
 }
 
-// Historical 10 years (Open-Meteo archive)
 async function loadHistory(){
   $('#chart').textContent='Loading…';hist=null;
   const y=new Date().getFullYear();
@@ -104,7 +98,6 @@ function drawChart(){
   $('#chart').innerHTML=`<svg viewBox="0 0 600 220" width="100%">${v.map((x,i)=>{const h=x/m*150;return `<rect x="${20+i*57}" y="${180-h}" width="40" height="${h}" fill="#1f3a2e"/><text x="${40+i*57}" y="${174-h}" text-anchor="middle">${Math.round(x)}</text><text x="${40+i*57}" y="200" text-anchor="middle">${ys[i]}</text>`}).join('')}</svg><small>Unit: ${unit}. Source: Open-Meteo archive (ERA5 reanalysis).</small>`;
 }
 
-// Guidance
 const G={
 flood:{before:['Know your evacuation route and nearest higher ground.','Keep documents and a go-bag ready (see the Prepare tab).','Move valuables and electrical items upstairs.'],
  during:['Move to higher ground immediately.','Never walk or drive through floodwater.','Avoid contact with floodwater; it may be contaminated.'],
@@ -141,7 +134,6 @@ const showO=()=>{
     return `<div class="card ${rel?'good':''}"><h3>${o.n}</h3>${rel?'<span class="tag live">Relevant to the area you checked</span>':''}<p><b>Best for:</b> ${o.best}</p><p><b>What a gift does:</b> ${o.how}</p><a target="_blank" rel="noopener" href="${o.url}">Official site →</a><a target="_blank" rel="noopener" href="${vet(o.n)}">Check rating →</a></div>`}).join('')};
 $('#ofocus').onchange=showO;showO();
 
-// ---- Live Events feed (auto-updating case studies)
 let evs=[],shown=[],map2,l2;
 const ICON={wildfires:'🔥',severeStorms:'🌀',floods:'🌊',volcanoes:'🌋',earthquakes:'📳',drought:'🏜️',landslides:'⛰️',seaLakeIce:'🧊',snow:'❄️',tempExtremes:'🌡️',dustHaze:'🌫️'};
 const ago=d=>{const h=(Date.now()-new Date(d))/36e5;return h<1?'just now':h<48?Math.round(h)+' h ago':Math.round(h/24)+' days ago'};
@@ -178,7 +170,6 @@ $('#feedList').onclick=e=>{const b=e.target.closest('button');if(!b)return;const
 document.querySelector('[data-tab=feed]').addEventListener('click',()=>setTimeout(()=>map2&&map2.invalidateSize(),50));
 loadFeed();setInterval(loadFeed,600000);
 
-// ---- Prepare checklist (localStorage, per device)
 const CK=['Water: 3 litres per person per day for 3 days','Non-perishable food for 3 days','Phone + power bank','Copies of ID in a waterproof bag','Medications and first-aid kit','Torch and spare batteries','Cash in small notes','Warm clothing / blanket','Family meeting point agreed','Emergency contacts written on paper'];
 let st={};try{st=JSON.parse(localStorage.getItem('cr_ck')||'{}')}catch{}
 $('#ck').innerHTML=CK.map((c,i)=>`<label><input type="checkbox" data-k="${i}" ${st[i]?'checked':''}> ${c}</label>`).join('');
@@ -186,15 +177,12 @@ $('#ck').onchange=e=>{st[e.target.dataset.k]=e.target.checked;try{localStorage.s
 try{$('#notes').value=localStorage.getItem('cr_notes')||''}catch{}
 $('#notes').oninput=e=>{try{localStorage.setItem('cr_notes',e.target.value)}catch{}};
 
-
-// Hospital markers live in their own layer so drawMap can't wipe them
 function drawFac(){
   if(!map)return;
   fac&&fac.remove();fac=L.layerGroup().addTo(map);
   facs.forEach(x=>L.marker([x.lat,x.lon]).addTo(fac).bindPopup(esc(x.n)));
 }
 
-// Verify-a-charity
 $('#vform').onsubmit=e=>{
   e.preventDefault();const n=$('#vq').value.trim();if(!n)return;const q=encodeURIComponent(n);
   $('#vres').innerHTML=`<p><a target="_blank" rel="noopener" href="https://www.charitynavigator.org/search?q=${q}">Charity Navigator</a><a target="_blank" rel="noopener" href="https://www.charitywatch.org">CharityWatch</a><a target="_blank" rel="noopener" href="https://duckduckgo.com/?q=${q}+charity+scam+OR+complaints">Search for complaints</a></p>`;
