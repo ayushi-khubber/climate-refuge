@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Climate Refuge</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="banner">In an emergency, call your local emergency services first. This site is a supplement, not a replacement.</div>
+<header>
+  <h1>CLIMATE REFUGE</h1>
+  <p>To Navigate Climate Displacement</p>
+  <form id="searchForm">
+    <input id="q" placeholder="Search a city or place…" aria-label="Location">
+    <button>Search</button>
+    <button type="button" id="geo">Use my location</button>
+  </form>
+  <div id="placeName" class="muted"></div>
+  <nav id="tabs">
+    <button data-tab="respond" class="on">Respond</button>
+    <button data-tab="feed">Live Events</button>
+    <button data-tab="anticipate">Anticipate</button>
+    <button data-tab="prepare">Prepare</button>
+    <button data-tab="act">Act &amp; Give</button>
+  </nav>
+</header>
+<main>
+<section id="respond" class="tab on">
+  <p class="lead">For right now: live conditions, nearby hazards, and the nearest help.</p>
+  <div class="grid">
+    <div class="card"><h3>Live conditions <span class="tag live">LIVE</span></h3><div id="now">Search a location to begin.</div></div>
+    <div class="card"><h3>Hazards within 500 km <span class="tag live">LIVE</span></h3><div id="alerts"></div><small>Sources: NASA EONET, USGS earthquakes (M2.5+, past day).</small></div>
+  </div>
+  <div id="map"></div>
+  <div class="grid">
+    <div class="card"><h3>Nearest hospitals &amp; clinics <span class="tag live">OpenStreetMap</span></h3><div id="facilities"></div><small>Crowd-sourced map data — may be incomplete. Always confirm by phone.</small></div>
+    <div class="card"><h3>Safety guidance</h3>
+      <select id="gsel"><option value="flood">Flooding</option><option value="heat">Extreme heat</option><option value="cyclone">Cyclone</option><option value="wildfire">Wildfire</option><option value="quake">Earthquake</option></select>
+      <div id="guide"></div>
+      <p><b>Emergency number:</b> <span id="emnum">112 works in many countries; check locally.</span></p>
+      <p><a target="_blank" rel="noopener" href="https://reliefweb.int/updates">Latest verified updates on ReliefWeb →</a></p>
+    </div>
+  </div>
+</section>
+
+<section id="anticipate" class="tab">
+  <p class="lead">For what's coming: forecast and ten years of history for your chosen location.</p>
+  <label>Hazard focus <select id="focus"><option value="heat">Heat</option><option value="rain">Rainfall</option><option value="wind">Wind</option><option value="drought">Drought</option></select></label>
+  <div class="card"><h3 id="chartTitle">Historical <span class="tag hist">HISTORICAL</span></h3><div id="chart">Search a location first.</div></div>
+  <div class="card"><h3>7-day forecast <span class="tag fc">FORECAST</span></h3><div id="fc"></div></div>
+  <div class="card"><h3>Vulnerability context</h3><p>Exposure, vulnerability and adaptive capacity differ greatly between regions. We do not invent a risk score — see the official
+  <a target="_blank" rel="noopener" href="https://gain.nd.edu/our-work/country-index/">ND-GAIN Country Index</a>.</p></div>
+</section>
+
+<section id="feed" class="tab">
+  <p class="lead">Live case studies: the world's latest disasters, auto-updated, with links to official reporting.</p>
+  <label>Type <select id="fcat"><option value="all">All</option></select></label>
+  <span id="feedStatus" class="muted"></span>
+  <div id="map2"></div>
+  <div id="feedList" class="grid"></div>
+  <small>Sources: NASA EONET (which links agencies such as InciWeb and GDACS) and USGS significant earthquakes. Refreshes every 10 minutes. Always confirm with your national authority.</small>
+</section>
+<section id="prepare" class="tab">
+  <p class="lead">Preparing before a disaster is the cheapest form of resilience. Saved only in your browser.</p>
+  <div class="grid"><div class="card"><h3>Go-bag checklist</h3><div id="ck"></div></div>
+  <div class="card"><h3>Family plan &amp; contacts</h3><textarea id="notes" rows="9" placeholder="Meeting point, out-of-area contact, medical needs, key phone numbers…"></textarea><small>Stays on this device (localStorage). Nothing is uploaded.</small></div></div>
+</section>
+
+<section id="act" class="tab">
+  <p class="lead">Where money goes matters as much as whether it's given.</p>
+  <label>Focus <select id="ofocus"><option value="all">All</option><option>displacement</option><option>food</option><option>medical</option><option>relief</option></select></label>
+  <div id="orgs" class="grid"></div>
+  <div class="grid">
+  <div class="card"><h3>How to give well</h3><ul>
+    <li><b>Cash beats goods.</b> Shipping, sorting and customs waste money and can clog relief routes.</li>
+    <li><b>Favor unrestricted funds.</b> Responders can send money where the need is greatest.</li>
+    <li><b>Monthly beats one-off.</b> Appeals spike after a disaster, but recovery takes years.</li>
+    <li><b>Give to forgotten crises.</b> See which appeals are underfunded on <a target="_blank" rel="noopener" href="https://fts.unocha.org">UN OCHA FTS</a>.</li>
+    <li><b>Local vs international.</b> Local groups are faster and cheaper but harder to vet. Pooled funds such as IFRC DREF and UN CERF are a middle path.</li>
+    <li><b>Tax.</b> Deductibility depends on your country (e.g. 80G in India). Check locally.</li>
+  </ul></div>
+  <div class="card"><h3>Verify before you give</h3>
+    <form id="vform"><input id="vq" placeholder="Charity name…" aria-label="Charity name"><button>Check</button></form>
+    <div id="vres"></div>
+    <hr><h3>Scam red flags</h3><ul>
+      <li>Pressure to give right now</li><li>Gift cards, crypto or wire transfers only</li>
+      <li>Names that mimic well-known charities</li><li>Unsolicited messages after a disaster</li>
+    </ul>
+  </div>
+</div>
+<div class="card"><h3>Other ways to help</h3><ul>
+  <li>Donate blood through official channels.</li>
+  <li>Volunteer with established organizations <i>before</i> a disaster; untrained arrivals can get in the way.</li>
+  <li>Share only verified information, with its source.</li>
+  <li>Check on neighbors, especially elderly people and those living alone.</li>
+</ul></div>
+</section>
+</main>
+<footer>Data: Open-Meteo, NASA EONET, USGS, OpenStreetMap. Every number is labeled live, forecast, or historical. Static site, no sign-up.</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="app.js"></script>
+</body></html>

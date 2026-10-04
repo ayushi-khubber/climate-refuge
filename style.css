@@ -1,0 +1,41 @@
+:root{--g:#1f3a2e;--c:#f6f1e7;--a:#c8553d;--t:#222}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.5 system-ui,sans-serif;background:var(--c);color:var(--t)}
+.banner{background:var(--a);color:#fff;text-align:center;padding:6px 10px;font-size:14px;position:sticky;top:0;z-index:1000}
+header{background:var(--g);color:#fff;padding:24px 20px 0}
+h1,h2,h3{font-family:Georgia,serif}
+h1{margin:0;letter-spacing:.15em}
+header p{margin:4px 0 14px;opacity:.85}
+form{display:flex;gap:8px;flex-wrap:wrap}
+input,select,button{font:inherit;padding:8px 12px;border-radius:6px;border:1px solid #bbb}
+input{flex:1;min-width:200px}
+button{cursor:pointer;background:#fff}
+#placeName{margin:8px 0;color:#cfe}
+nav{display:flex;gap:4px;flex-wrap:wrap;margin-top:12px}
+nav button{background:transparent;color:#fff;border:0;border-bottom:3px solid transparent;border-radius:0}
+nav button.on{border-color:var(--a)}
+main{max-width:1000px;margin:auto;padding:20px}
+.tab{display:none}.tab.on{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:16px 0}
+.card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 4px #0002;margin-bottom:8px}
+.card h3{margin-top:0}
+.good{border-left:5px solid #3b7d5a}.bad{border-left:5px solid var(--a)}
+.tag{font:11px system-ui;padding:2px 6px;border-radius:4px;background:#ddd;vertical-align:middle}
+.live{background:#cdeedb}.fc{background:#fde7b0}.hist{background:#d6e4f5}
+#map{height:320px;border-radius:10px;margin:16px 0}
+.lead{font-family:Georgia,serif;font-size:19px}
+.muted,small{color:#666}
+.row{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:4px 0;gap:8px}
+.err{color:#a33}
+svg text{font-size:11px}
+footer{text-align:center;padding:24px;color:#666;font-size:13px}
+#map2{height:340px;border-radius:10px;margin:16px 0}
+.card button{margin-top:6px;background:var(--g);color:#fff}
+.card a{margin-right:10px}
+textarea{width:100%;font:inherit;padding:8px;border-radius:6px;border:1px solid #bbb}
+#ck label{display:block;padding:3px 0}
+
+#guide h4{margin:12px 0 2px;font-family:Georgia,serif}
+#guide ul{margin:0}
+#vres a{margin-right:10px}
+hr{border:0;border-top:1px solid #eee;margin:14px 0}
