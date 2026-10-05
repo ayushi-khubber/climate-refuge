@@ -117,7 +117,6 @@ quake:{before:['Secure heavy furniture to walls.','Know the safe spots in each r
 const showG=()=>{const g=G[$('#gsel').value];$('#guide').innerHTML=[['Before',g.before],['During',g.during],['After',g.after]].map(([t,a])=>`<h4>${t}</h4><ul>${a.map(x=>`<li>${x}</li>`).join('')}</ul>`).join('')};
 $('#gsel').onchange=showG;showG();
 
-// Act & Give (links go to each organization's official site)
 const ORGS=[
  {n:'IFRC (Red Cross / Red Crescent)',url:'https://www.ifrc.org',focus:'relief',tags:['floods','severeStorms','earthquakes','wildfires'],best:'Fast response through local volunteers',how:'Supports national societies already on the ground, including pre-positioned relief and early funding.'},
  {n:'MSF (Doctors Without Borders)',url:'https://www.msf.org',focus:'medical',tags:['earthquakes','floods'],best:'Medical care in crises',how:'Funds clinics, surgery and outbreak response. Unrestricted gifts are preferred.'},
